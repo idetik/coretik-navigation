@@ -1,0 +1,18 @@
+{
+    "name": "idetik/coretik-navigation",
+    "description": "Service navigation",
+    "type": "library",
+    "minimum-stability": "dev",
+    "require": {
+        "idetik/coretik": "^1.0"
+    },
+    "authors": [
+        {
+            "name": "David",
+            "email": "david.daugreilh@idetik.fr"
+        }
+    ],
+    "autoload": {
+        "psr-4": { "Coretik\\Navigation\\": ["src"] }
+    }
+}

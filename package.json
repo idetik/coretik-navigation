@@ -1,0 +1,31 @@
+{
+    "name": "@idetik-group/coretik-navigation",
+    "version": "1.0.0",
+    "description": "Wordpress coretik - service navigation",
+    "scripts": {
+        "semantic-release": "semantic-release"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/idetik/coretik-navigation.git"
+    },
+    "author": "David Daugreilh, @idetik",
+    "license": "ISC",
+    "publishConfig": {
+        "access": "public"
+    },
+    "browserslist": [
+        ">0.2% in FR",
+        "not dead",
+        "not op_mini all",
+        "not IE <= 11"
+    ],
+    "devDependencies": {
+        "@semantic-release/changelog": "^6.0.1",
+        "@semantic-release/git": "^10.0.1",
+        "@semantic-release/github": "^8.0.6",
+        "@semantic-release/npm": "^9.0.1",
+        "@semantic-release/release-notes-generator": "^10.0.3",
+        "semantic-release": "^19.0.5"
+    }
+}
