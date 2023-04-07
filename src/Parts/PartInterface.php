@@ -6,7 +6,6 @@ use Coretik\Core\Interfaces\CollectionInterface;
 
 interface PartInterface
 {
-
     public function title(): string;
     public function url(): string;
     public function current(): bool;

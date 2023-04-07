@@ -114,11 +114,8 @@ class Navigation
         $part = \apply_filters('coretik/navigation/part/name=' . $partName, null, $this);
 
         if (!empty($part) && $part instanceof PartInterface) {
-
             $this->parts[$partName] = $part;
-
         } else {
-
             switch ($partName) {
                 case 'part':
                     return new Parts\Part(...$args);
@@ -127,7 +124,6 @@ class Navigation
                     $this->parts[$partName] = new $classname(...$args);
                     break;
             }
-
         }
 
         return $this->parts[$partName];

@@ -8,6 +8,7 @@ use Coretik\Core\Interfaces\CollectionInterface;
 class Archive extends Part
 {
     protected $postType;
+    protected $page;
 
     public function postType()
     {

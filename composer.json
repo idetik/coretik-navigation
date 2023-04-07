@@ -3,9 +3,7 @@
     "description": "Service navigation",
     "type": "library",
     "minimum-stability": "dev",
-    "require": {
-        "idetik/coretik": "^1.0"
-    },
+    "prefer-stable": true,
     "authors": [
         {
             "name": "David",
@@ -14,5 +12,9 @@
     ],
     "autoload": {
         "psr-4": { "Coretik\\Navigation\\": ["src"] }
+    },
+    "require": {
+        "idetik/coretik": "^1.4",
+        "squizlabs/php_codesniffer": "^3.7"
     }
 }
