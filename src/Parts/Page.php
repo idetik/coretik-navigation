@@ -26,7 +26,7 @@ class Page extends Part
 
     public function title(): string
     {
-        return app()->schema('page')->model($this->id())->title();
+        return $this->title ?? app()->schema('page')->model($this->id())->title();
     }
 
     public function url(): string

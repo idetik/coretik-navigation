@@ -9,7 +9,7 @@ class Blog extends Part
 {
     public function title(): string
     {
-        return \get_the_title(\get_option('page_for_posts'));
+        return $this->title ?? \get_the_title(\get_option('page_for_posts'));
     }
 
     public function url(): string

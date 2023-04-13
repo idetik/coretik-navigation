@@ -59,7 +59,7 @@ class Archive extends Part
 
     public function title(): string
     {
-        return $this->isPageArchive() ? $this->model()->title() : ucfirst(app()->schema($this->postType())->args()->get('labels')['plural']);
+        return $this->title ?? ($this->isPageArchive() ? $this->model()->title() : ucfirst(app()->schema($this->postType())->args()->get('labels')['plural']));
     }
 
     public function url(): string

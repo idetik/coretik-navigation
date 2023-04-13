@@ -13,7 +13,7 @@ class Taxonomy extends Part
 
     public function title(): string
     {
-        return $this->model()->title();
+        return $this->title ?? $this->model()->title();
     }
 
     public function url(): string
