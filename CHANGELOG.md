@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/idetik/coretik-navigation/compare/v1.0.1...v1.0.2) (2023-04-13)
+
+
+### Bug Fixes
+
+* enhance hooks management ([837f09a](https://github.com/idetik/coretik-navigation/commit/837f09a96bc6c3cc046325d3e23cd87b79993768))
+
 ## [1.0.1](https://github.com/idetik/coretik-navigation/compare/v1.0.0...v1.0.1) (2023-04-07)
 
 
