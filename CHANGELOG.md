@@ -1,3 +1,10 @@
+## [1.0.3](https://github.com/idetik/coretik-navigation/compare/v1.0.2...v1.0.3) (2023-04-13)
+
+
+### Bug Fixes
+
+* check title part property to allow hook it ([b54a6eb](https://github.com/idetik/coretik-navigation/commit/b54a6eb6ab18218af3b745a78dfb696ee45b1651))
+
 ## [1.0.2](https://github.com/idetik/coretik-navigation/compare/v1.0.1...v1.0.2) (2023-04-13)
 
 
