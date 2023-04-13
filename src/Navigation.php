@@ -81,6 +81,12 @@ class Navigation
 
     public function current(): PartInterface
     {
+        $current = \apply_filters('coretik/navigation/current', null, $this);
+
+        if (!empty($current)) {
+            return $current;
+        }
+
         switch (true) {
             case \is_home():
                 return $this->partsFactory('blog')->setCurrent();
@@ -111,7 +117,7 @@ class Navigation
             return $this->parts[$partName];
         }
 
-        $part = \apply_filters('coretik/navigation/part/name=' . $partName, null, $this);
+        $part = \apply_filters('coretik/navigation/part/name=' . $partName, null, $args, $this);
 
         if (!empty($part) && $part instanceof PartInterface) {
             $this->parts[$partName] = $part;

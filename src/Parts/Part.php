@@ -14,7 +14,9 @@ class Part implements PartInterface
 
     public function __construct(bool $current = false)
     {
-        static::$navigation = app()->navigation();
+        if (!isset(static::$navigation)) {
+            static::$navigation = app()->navigation();
+        }
         $this->setCurrent($current);
     }
 
