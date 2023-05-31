@@ -82,7 +82,7 @@ class Archive extends Part
                 if ($collection->count() > 0) {
                     $termModel = $collection->first();
                     $part = static::$navigation->partsFactory('taxonomy')->setModel($termModel);
-                    $parts->replace($part->breadcrumb());
+                    $parts = $parts->replace($part->breadcrumb());
                 }
             }
 
@@ -90,7 +90,7 @@ class Archive extends Part
                 $hasFilter = true;
                 $termModel = app()->schema(\get_queried_object()->taxonomy)->model(\get_queried_object()->term_id, \get_queried_object());
                 $part = static::$navigation->partsFactory('taxonomy')->setModel($termModel);
-                $parts->replace($part->breadcrumb());
+                $parts = $parts->replace($part->breadcrumb());
             }
         }
 

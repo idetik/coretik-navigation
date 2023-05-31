@@ -27,9 +27,10 @@ class Single extends Part
         return $this->model;
     }
 
-    public function setModel($model)
+    public function setModel($model): self
     {
         $this->model = $model;
+        return $this;
     }
 
     public function breadcrumb(): CollectionInterface
@@ -49,7 +50,7 @@ class Single extends Part
                     $category = app()->schema($category->taxonomy)->model($category->term_id, $category);
                 }
                 $part = static::$navigation->partsFactory('taxonomy')->setModel($category);
-                $parts->replace($part->breadcrumb());
+                $parts = $parts->replace($part->breadcrumb());
             }
         }
 

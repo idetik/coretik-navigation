@@ -29,13 +29,13 @@ class Taxonomy extends Part
         return $this->model;
     }
 
-    public function setModel($model)
+    public function setModel($model): self
     {
         $this->model = $model;
         return $this;
     }
 
-    public function parents()
+    public function parents(): array
     {
         if (!isset($this->parents)) {
             $this->parents = [];
