@@ -1,3 +1,10 @@
+## [1.0.4](https://github.com/idetik/coretik-navigation/compare/v1.0.3...v1.0.4) (2023-05-31)
+
+
+### Bug Fixes
+
+* Fix parts collection & PSR ([e1f2246](https://github.com/idetik/coretik-navigation/commit/e1f22461acc7dc2cb503fcc845687c87fcceda87))
+
 ## [1.0.3](https://github.com/idetik/coretik-navigation/compare/v1.0.2...v1.0.3) (2023-04-13)
 
 
