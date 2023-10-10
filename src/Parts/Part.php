@@ -11,6 +11,8 @@ class Part implements PartInterface
     protected $title;
     protected $url;
     protected static $navigation;
+    protected bool $noIndex = false;
+    protected bool $noFollow = false;
 
     public function __construct(bool $current = false)
     {

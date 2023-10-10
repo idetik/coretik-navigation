@@ -9,8 +9,6 @@ class Page extends Part
 {
     protected $id;
     protected $parents;
-    protected bool $noIndex = false;
-    protected bool $noFollow = false;
 
     protected function id()
     {
