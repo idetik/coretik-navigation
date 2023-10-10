@@ -55,40 +55,4 @@ class Page extends Part
 
         return $parts;
     }
-
-    /**
-     * @param bool $noIndex 
-     * @return self
-     */
-    public function setNoIndex(bool $noIndex): self
-    {
-        $this->noIndex = $noIndex;
-        return $this;
-    }
-
-    /**
-     * @param bool $noFollow 
-     * @return self
-     */
-    public function setNoFollow(bool $noFollow): self
-    {
-        $this->noFollow = $noFollow;
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getNoIndex(): bool
-    {
-        return $this->noIndex;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getNoFollow(): bool
-    {
-        return $this->noFollow;
-    }
 }
