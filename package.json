@@ -1,6 +1,6 @@
 {
     "name": "@idetik-group/coretik-navigation",
-    "version": "1.0.5",
+    "version": "1.0.6",
     "description": "Wordpress coretik - service navigation",
     "scripts": {
         "semantic-release": "semantic-release"
