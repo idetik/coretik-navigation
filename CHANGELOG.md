@@ -1,3 +1,10 @@
+## [1.0.5](https://github.com/idetik/coretik-navigation/compare/v1.0.4...v1.0.5) (2023-10-10)
+
+
+### Bug Fixes
+
+* add parts page noindex & nofollow methods ([13e7974](https://github.com/idetik/coretik-navigation/commit/13e7974553860d3ffe457d7a04f7a222746479ee))
+
 ## [1.0.4](https://github.com/idetik/coretik-navigation/compare/v1.0.3...v1.0.4) (2023-05-31)
 
 
