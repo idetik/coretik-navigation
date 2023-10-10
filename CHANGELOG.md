@@ -1,3 +1,10 @@
+## [1.0.7](https://github.com/idetik/coretik-navigation/compare/v1.0.6...v1.0.7) (2023-10-10)
+
+
+### Bug Fixes
+
+* fix deprecated php 8.2 object part ([fdf6c5c](https://github.com/idetik/coretik-navigation/commit/fdf6c5c7e1f0edfdb132f58e617ff28ef57b0594))
+
 ## [1.0.6](https://github.com/idetik/coretik-navigation/compare/v1.0.5...v1.0.6) (2023-10-10)
 
 
