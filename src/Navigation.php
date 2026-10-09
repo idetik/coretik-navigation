@@ -75,7 +75,7 @@ class Navigation
         if (!$this->isArchive()) {
             return false;
         }
-        $model = $this->container->schema('page')->model(\get_the_ID());
+        $model = $this->container->get('schema')->get('page')->model(\get_the_ID());
         return $postType === $model->archive_post_type;
     }
 
