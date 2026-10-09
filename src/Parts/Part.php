@@ -5,6 +5,9 @@ namespace Coretik\Navigation\Parts;
 use Coretik\Core\Collection;
 use Coretik\Core\Interfaces\CollectionInterface;
 
+/**
+ * @phpstan-consistent-constructor
+ */
 class Part implements PartInterface
 {
     protected $current;
@@ -17,19 +20,19 @@ class Part implements PartInterface
     public function __construct(bool $current = false)
     {
         if (!isset(static::$navigation)) {
-            static::$navigation = app()->navigation();
+            static::$navigation = \Coretik\App::instance()->navigation();
         }
         $this->setCurrent($current);
     }
 
     public function title(): string
     {
-        return $this->title;
+        return $this->title ?? '';
     }
 
     public function url(): string
     {
-        return $this->url;
+        return $this->url ?? '';
     }
 
     public function current(): bool
@@ -72,7 +75,7 @@ class Part implements PartInterface
     }
 
     /**
-     * @param bool $noIndex 
+     * @param bool $noIndex
      * @return self
      */
     public function setNoIndex(bool $noIndex): self
@@ -82,7 +85,7 @@ class Part implements PartInterface
     }
 
     /**
-     * @param bool $noFollow 
+     * @param bool $noFollow
      * @return self
      */
     public function setNoFollow(bool $noFollow): self

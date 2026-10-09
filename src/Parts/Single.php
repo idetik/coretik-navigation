@@ -11,18 +11,21 @@ class Single extends Part
 
     public function title(): string
     {
-        return $this->title ?? $this->model()->title();
+        return $this->title ?? ($this->model()?->title() ?? \get_the_title());
     }
 
     public function url(): string
     {
-        return $this->model()->permalink();
+        return $this->model()?->permalink() ?? (string)\get_permalink();
     }
 
+    /**
+     * The coretik model, null when the post type is not declared in the coretik schema
+     */
     public function model()
     {
         if (!isset($this->model)) {
-            $this->model = app()->schema(\get_post_type())->model(\get_the_ID());
+            $this->model = static::$navigation->builder(\get_post_type())?->model(\get_the_ID());
         }
         return $this->model;
     }
@@ -33,23 +36,37 @@ class Single extends Part
         return $this;
     }
 
+    protected function postType(): string
+    {
+        return (string)($this->model()?->name() ?? \get_post_type());
+    }
+
+    protected function hasArchive(): bool
+    {
+        $builder = static::$navigation->builder($this->postType());
+        if (!empty($builder)) {
+            return (bool)$builder->args()->get('has_archive');
+        }
+        return (bool)(\get_post_type_object($this->postType())->has_archive ?? false);
+    }
+
     public function breadcrumb(): CollectionInterface
     {
         $parts = new Collection();
 
-        $builder = app()->schema($this->model()->name());
-        if ($builder->args()->get('has_archive')) {
-            $part = static::$navigation->partsFactory('archive')->setPostType($builder->getName());
+        if ($this->hasArchive()) {
+            $part = static::$navigation->newPart('archive')->setPostType($this->postType());
             $parts->set(\get_class($part), $part);
         }
 
-        if (\method_exists($this->model(), 'category')) {
-            $category = $this->model()->category();
+        $model = $this->model();
+        if (!empty($model) && \method_exists($model, 'category')) {
+            $category = $model->category();
+            if ($category instanceof \WP_Term) {
+                $category = static::$navigation->builder($category->taxonomy)?->model($category->term_id, $category);
+            }
             if (!empty($category)) {
-                if ($category instanceof \WP_Term) {
-                    $category = app()->schema($category->taxonomy)->model($category->term_id, $category);
-                }
-                $part = static::$navigation->partsFactory('taxonomy')->setModel($category);
+                $part = static::$navigation->newPart('taxonomy')->setModel($category);
                 $parts = $parts->replace($part->breadcrumb());
             }
         }
