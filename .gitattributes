@@ -13,3 +13,9 @@
 .editorconfig export-ignore
 .gitignore export-ignore
 phpcs.xml export-ignore
+/tests export-ignore
+phpunit.xml.dist export-ignore
+phpstan.neon.dist export-ignore
+/.github export-ignore
+package.json export-ignore
+package-lock.json export-ignore

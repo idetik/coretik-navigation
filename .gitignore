@@ -5,3 +5,5 @@ node_modules/
 .DS_Store
 *~
 .fuse*
+.phpunit.result.cache
+.phpunit.cache/

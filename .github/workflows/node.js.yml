@@ -10,7 +10,32 @@ on:
     branches: [ "master" ]
 
 jobs:
+  tests:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php-version: ['8.2', '8.4']
+        # coretik version: the locked 1.x, and 2.0 (next branch until its release)
+        coretik: ['locked', 'next']
+
+    container: php:${{ matrix.php-version }}-cli
+
+    steps:
+    - run: apt-get update && apt-get install -y --no-install-recommends git unzip
+    - uses: actions/checkout@v4
+    - run: php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && php composer-setup.php --install-dir=/usr/local/bin --filename=composer && rm composer-setup.php
+    - run: composer install --no-interaction --no-progress
+    - if: matrix.coretik == 'next'
+      run: composer require "idetik/coretik:dev-next as 2.0.0" -W --no-interaction --no-progress
+    - run: vendor/bin/phpunit
+    - run: vendor/bin/phpstan analyse --no-progress --memory-limit=1G
+    - run: vendor/bin/phpcs --standard=phpcs.xml src tests
+
   build:
+
+    needs: tests
 
     runs-on: ubuntu-latest
 
