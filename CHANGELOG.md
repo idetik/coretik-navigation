@@ -1,3 +1,16 @@
+# [1.1.0](https://github.com/idetik/coretik-navigation/compare/v1.0.7...v1.1.0) (2026-10-09)
+
+
+### Bug Fixes
+
+* isPostTypeArchive() called an undefined schema() method on the container ([2dcd97d](https://github.com/idetik/coretik-navigation/commit/2dcd97dfbbada1b8d1bf53503fb31607693ec1f3))
+* navigation failed on content unknown to coretik and other breadcrumb bugs ([16222d3](https://github.com/idetik/coretik-navigation/commit/16222d324a2503c5b28bb67ad4c6cf92b2bd50d7))
+
+
+### Features
+
+* support coretik 2 ([4cdd51c](https://github.com/idetik/coretik-navigation/commit/4cdd51cfe2a039035b764b69072f2c351213c746))
+
 ## [1.0.7](https://github.com/idetik/coretik-navigation/compare/v1.0.6...v1.0.7) (2023-10-10)
 
 
