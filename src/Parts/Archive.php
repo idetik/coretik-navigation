@@ -30,7 +30,7 @@ class Archive extends Part
             return !!$this->page;
         }
 
-        $builder = app()->schema($this->postType());
+        $builder = \Coretik\App::instance()->schema($this->postType());
         if ($builder->args()->get('use_archive_page')) {
             global $wp_rewrite;
             $path = true === $builder->args()->get('has_archive') ? $builder->args()->get('rewrite')['slug'] : $builder->args()->get('has_archive');
@@ -51,7 +51,7 @@ class Archive extends Part
     protected function model()
     {
         if ($this->isPageArchive()) {
-            return app()->schema('page')->model($this->page->ID, $this->page);
+            return \Coretik\App::instance()->schema('page')->model($this->page->ID, $this->page);
         }
 
         return null;
@@ -59,7 +59,7 @@ class Archive extends Part
 
     public function title(): string
     {
-        return $this->title ?? ($this->isPageArchive() ? $this->model()->title() : ucfirst(app()->schema($this->postType())->args()->get('labels')['plural']));
+        return $this->title ?? ($this->isPageArchive() ? $this->model()->title() : ucfirst(\Coretik\App::instance()->schema($this->postType())->args()->get('labels')['plural']));
     }
 
     public function url(): string
@@ -78,7 +78,7 @@ class Archive extends Part
             if (!empty($this->model()->currentFilters())) {
                 $hasFilter = true;
                 $tax = $this->model()->currentFilters();
-                $collection = app()->schema(key($tax))->query()->set('slug', current($tax))->set('hide_empty', false)->collection();
+                $collection = \Coretik\App::instance()->schema(key($tax))->query()->set('slug', current($tax))->set('hide_empty', false)->collection();
                 if ($collection->count() > 0) {
                     $termModel = $collection->first();
                     $part = static::$navigation->partsFactory('taxonomy')->setModel($termModel);
@@ -88,7 +88,7 @@ class Archive extends Part
 
             if (is_tax()) {
                 $hasFilter = true;
-                $termModel = app()->schema(\get_queried_object()->taxonomy)->model(\get_queried_object()->term_id, \get_queried_object());
+                $termModel = \Coretik\App::instance()->schema(\get_queried_object()->taxonomy)->model(\get_queried_object()->term_id, \get_queried_object());
                 $part = static::$navigation->partsFactory('taxonomy')->setModel($termModel);
                 $parts = $parts->replace($part->breadcrumb());
             }

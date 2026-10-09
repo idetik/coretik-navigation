@@ -24,7 +24,7 @@ class Taxonomy extends Part
     public function model()
     {
         if (!isset($this->model)) {
-            $this->model = app()->schema(\get_queried_object()->taxonomy)->model(\get_queried_object()->term_id, \get_queried_object());
+            $this->model = \Coretik\App::instance()->schema(\get_queried_object()->taxonomy)->model(\get_queried_object()->term_id, \get_queried_object());
         }
         return $this->model;
     }
@@ -41,7 +41,7 @@ class Taxonomy extends Part
             $this->parents = [];
             $parents = \array_reverse(\get_ancestors($this->model()->id(), $this->model()->taxonomy));
             foreach ($parents as $parent_id) {
-                $model = app()->schema($this->model()->taxonomy)->model($parent_id, \get_term((int)$parent_id, $this->model()->taxonomy));
+                $model = \Coretik\App::instance()->schema($this->model()->taxonomy)->model($parent_id, \get_term((int)$parent_id, $this->model()->taxonomy));
                 $this->parents[] = (new static())->setModel($model);
             }
         }

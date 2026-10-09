@@ -26,12 +26,12 @@ class Page extends Part
 
     public function title(): string
     {
-        return $this->title ?? app()->schema('page')->model($this->id())->title();
+        return $this->title ?? \Coretik\App::instance()->schema('page')->model($this->id())->title();
     }
 
     public function url(): string
     {
-        return app()->schema('page')->model($this->id())->permalink();
+        return \Coretik\App::instance()->schema('page')->model($this->id())->permalink();
     }
 
     public function parents()

@@ -22,7 +22,7 @@ class Single extends Part
     public function model()
     {
         if (!isset($this->model)) {
-            $this->model = app()->schema(\get_post_type())->model(\get_the_ID());
+            $this->model = \Coretik\App::instance()->schema(\get_post_type())->model(\get_the_ID());
         }
         return $this->model;
     }
@@ -37,7 +37,7 @@ class Single extends Part
     {
         $parts = new Collection();
 
-        $builder = app()->schema($this->model()->name());
+        $builder = \Coretik\App::instance()->schema($this->model()->name());
         if ($builder->args()->get('has_archive')) {
             $part = static::$navigation->partsFactory('archive')->setPostType($builder->getName());
             $parts->set(\get_class($part), $part);
@@ -47,7 +47,7 @@ class Single extends Part
             $category = $this->model()->category();
             if (!empty($category)) {
                 if ($category instanceof \WP_Term) {
-                    $category = app()->schema($category->taxonomy)->model($category->term_id, $category);
+                    $category = \Coretik\App::instance()->schema($category->taxonomy)->model($category->term_id, $category);
                 }
                 $part = static::$navigation->partsFactory('taxonomy')->setModel($category);
                 $parts = $parts->replace($part->breadcrumb());
