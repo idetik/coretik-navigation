@@ -21,6 +21,7 @@ class Archive extends Part
     public function setPostType(string $post_type)
     {
         $this->postType = $post_type;
+        $this->page = null;
         return $this;
     }
 
@@ -30,14 +31,16 @@ class Archive extends Part
             return !!$this->page;
         }
 
-        $builder = \Coretik\App::instance()->schema($this->postType());
-        if ($builder->args()->get('use_archive_page')) {
+        $builder = static::$navigation->builder($this->postType());
+        if (!empty($builder) && $builder->args()->get('use_archive_page')) {
             global $wp_rewrite;
-            $path = true === $builder->args()->get('has_archive') ? $builder->args()->get('rewrite')['slug'] : $builder->args()->get('has_archive');
-            if ($builder->args()->get('rewrite')['with_front']) {
+            $rewrite = $builder->args()->get('rewrite');
+            $hasArchive = $builder->args()->get('has_archive');
+            $path = \is_string($hasArchive) ? $hasArchive : (\is_array($rewrite) && !empty($rewrite['slug']) ? $rewrite['slug'] : $this->postType());
+            if (\is_array($rewrite) && ($rewrite['with_front'] ?? true) && isset($wp_rewrite->front)) {
                 $path = substr($wp_rewrite->front, 1) . $path;
             } else {
-                $path = $wp_rewrite->root . $path;
+                $path = ($wp_rewrite->root ?? '') . $path;
             }
             if ($page = \get_page_by_path($path)) {
                 $this->page = $page;
@@ -59,7 +62,15 @@ class Archive extends Part
 
     public function title(): string
     {
-        return $this->title ?? ($this->isPageArchive() ? $this->model()->title() : ucfirst(\Coretik\App::instance()->schema($this->postType())->args()->get('labels')['plural']));
+        if (isset($this->title)) {
+            return $this->title;
+        }
+        if ($this->isPageArchive()) {
+            return $this->model()->title();
+        }
+        $builder = static::$navigation->builder($this->postType());
+        $label = !empty($builder) ? ($builder->args()->get('labels')['plural'] ?? '') : (\get_post_type_object($this->postType())->labels->name ?? '');
+        return ucfirst((string)$label);
     }
 
     public function url(): string
@@ -81,7 +92,7 @@ class Archive extends Part
                 $collection = \Coretik\App::instance()->schema(key($tax))->query()->set('slug', current($tax))->set('hide_empty', false)->collection();
                 if ($collection->count() > 0) {
                     $termModel = $collection->first();
-                    $part = static::$navigation->partsFactory('taxonomy')->setModel($termModel);
+                    $part = static::$navigation->newPart('taxonomy')->setModel($termModel);
                     $parts = $parts->replace($part->breadcrumb());
                 }
             }
@@ -89,7 +100,7 @@ class Archive extends Part
             if (is_tax()) {
                 $hasFilter = true;
                 $termModel = \Coretik\App::instance()->schema(\get_queried_object()->taxonomy)->model(\get_queried_object()->term_id, \get_queried_object());
-                $part = static::$navigation->partsFactory('taxonomy')->setModel($termModel);
+                $part = static::$navigation->newPart('taxonomy')->setModel($termModel);
                 $parts = $parts->replace($part->breadcrumb());
             }
         }

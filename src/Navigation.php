@@ -27,19 +27,38 @@ class Navigation
         return \apply_filters('coretik/navigation/breadcrumb', $this->current()->breadcrumb(), $this);
     }
 
+    /**
+     * The coretik builder of a post type / taxonomy, null when it is not declared in the coretik schema
+     */
+    public function builder(?string $name)
+    {
+        return empty($name) ? null : $this->container->get('schema')->get($name);
+    }
+
     public function currentPostType(): string
     {
         if ($this->isPageArchive()) {
-            $model = $this->container->get('schema')->get('page')->model(\get_the_ID());
-            return $model->archive_post_type;
+            return $this->archivePostType(\get_the_ID());
         }
 
-        return \get_post_type();
+        return (string)\get_post_type();
     }
 
+    /**
+     * Post types archives (not author, date or taxonomy archives)
+     */
     public function isArchive(): bool
     {
-        return \apply_filters('coretik/navigation/isArchive', \is_archive() || $this->isPageArchive(), $this);
+        return \apply_filters('coretik/navigation/isArchive', \is_post_type_archive() || $this->isPageArchive(), $this);
+    }
+
+    /**
+     * Post type of an archive page (archive_post_type meta), empty if none
+     */
+    protected function archivePostType(int $id): string
+    {
+        $model = $this->builder('page')?->model($id);
+        return (string)($model->archive_post_type ?? '');
     }
 
     public function isPageArchive(int $id = 0): bool
@@ -56,10 +75,8 @@ class Navigation
             return false;
         }
 
-        try {
-            $model = $this->container->get('schema')->get('page')->model($id);
-            $builder = $this->container->get('schema')->get($model->archive_post_type);
-        } catch (\Coretik\Core\Exception\ContainerValueNotFoundException $e) {
+        $builder = $this->builder($this->archivePostType($id));
+        if (empty($builder)) {
             return false;
         }
 
@@ -75,8 +92,7 @@ class Navigation
         if (!$this->isArchive()) {
             return false;
         }
-        $model = $this->container->get('schema')->get('page')->model(\get_the_ID());
-        return $postType === $model->archive_post_type;
+        return $postType === $this->currentPostType();
     }
 
     public function current(): PartInterface
@@ -96,7 +112,11 @@ class Navigation
                 return $this->partsFactory('search')->setCurrent();
             case \is_tax():
             case \is_category():
+            case \is_tag():
                 return $this->partsFactory('taxonomy')->setCurrent();
+            case \is_author():
+            case \is_date():
+                return $this->genericPart(\wp_strip_all_tags(\get_the_archive_title()), get_current_url());
             case $this->isArchive():
                 return $this->partsFactory('archive')->setCurrent();
             case \is_page():
@@ -104,11 +124,25 @@ class Navigation
             case \is_single():
                 return $this->partsFactory('single')->setCurrent();
             default:
-                return $this->partsFactory('part')
-                            ->setCurrent()
-                            ->setTitle(\get_the_title())
-                            ->setUrl(get_current_url());
+                return $this->genericPart(\get_the_title(), get_current_url());
         }
+    }
+
+    protected function genericPart(string $title, string $url): PartInterface
+    {
+        $part = $this->partsFactory('part')->setCurrent();
+        if ($part instanceof Parts\Part) {
+            $part->setTitle($title)->setUrl($url);
+        }
+        return $part;
+    }
+
+    /**
+     * A new part, for breadcrumbs: parts given by partsFactory() are shared
+     */
+    public function newPart(string $partName): PartInterface
+    {
+        return clone $this->partsFactory($partName);
     }
 
     public function partsFactory($partName, array $args = []): PartInterface

@@ -13,18 +13,28 @@ class Taxonomy extends Part
 
     public function title(): string
     {
-        return $this->title ?? $this->model()->title();
+        return $this->title ?? ($this->model()?->title() ?? (string)\single_term_title('', false));
     }
 
     public function url(): string
     {
-        return $this->model()->permalink();
+        if (!empty($this->model())) {
+            return $this->model()->permalink();
+        }
+        $link = \get_term_link(\get_queried_object());
+        return \is_string($link) ? $link : '';
     }
 
+    /**
+     * The coretik model, null when the taxonomy is not declared in the coretik schema
+     */
     public function model()
     {
         if (!isset($this->model)) {
-            $this->model = \Coretik\App::instance()->schema(\get_queried_object()->taxonomy)->model(\get_queried_object()->term_id, \get_queried_object());
+            $term = \get_queried_object();
+            if ($term instanceof \WP_Term) {
+                $this->model = static::$navigation->builder($term->taxonomy)?->model($term->term_id, $term);
+            }
         }
         return $this->model;
     }
@@ -32,6 +42,7 @@ class Taxonomy extends Part
     public function setModel($model): self
     {
         $this->model = $model;
+        $this->parents = null;
         return $this;
     }
 
@@ -39,10 +50,17 @@ class Taxonomy extends Part
     {
         if (!isset($this->parents)) {
             $this->parents = [];
-            $parents = \array_reverse(\get_ancestors($this->model()->id(), $this->model()->taxonomy));
+            $model = $this->model();
+            if (empty($model)) {
+                return $this->parents;
+            }
+            $builder = static::$navigation->builder($model->taxonomy);
+            $parents = \array_reverse(\get_ancestors($model->id(), $model->taxonomy));
             foreach ($parents as $parent_id) {
-                $model = \Coretik\App::instance()->schema($this->model()->taxonomy)->model($parent_id, \get_term((int)$parent_id, $this->model()->taxonomy));
-                $this->parents[] = (new static())->setModel($model);
+                $parent = $builder?->model($parent_id, \get_term((int)$parent_id, $model->taxonomy));
+                if (!empty($parent)) {
+                    $this->parents[] = (new static())->setModel($parent);
+                }
             }
         }
         return $this->parents;
